@@ -190,6 +190,59 @@ fun exercise3point23() {
 //tailrec fun <A> startsWith(l1: List<A>, l2: List<A>): Boolean =
 }
 
+fun exercise3point24() {
+//    Write a function size that counts the number of nodes (leaves and branches) in a tree.
+// fun <A> size(tree: Tree<A>): Int =
+}
+
+fun exercise3point25() {
+//    Write a function maximum that returns the maximum element in a Tree<Int>.
+// fun <A> maxElement(tree: Tree<A>): Int =
+}
+
+fun exercise3point26() {
+//    Write a function depth that returns the maximum path length
+//    from the root of a tree to any leaf.// fun <A> maxElement(tree: Tree<A>): Int =
+// fun <A> maxPathLength(tree: Tree<A>): Int =
+}
+
+fun exercise3point27() {
+//    Write a function map, analogous to the method of the same name on
+//    List, that modifies each element in a tree with a given function.
+//fun <A, B> map(tree: Tree<A>, f: (A) -> B): Tree<B> =
+}
+
+fun <A, B> map(tree: Tree<A>, f: (A) -> B): Tree<B> =
+    when (tree) {
+        is Leaf -> Leaf(f(tree.value))
+        is Branch -> Branch(map(tree.left, f), map(tree.right, f))
+    }
+
+fun <A> maxPathLength(tree: Tree<A>): Int =
+    when (tree) {
+        is Leaf -> 1
+        is Branch -> 1 + maxOf(maxPathLength(tree.left), maxPathLength(tree.right))
+    }
+
+fun maxElement(tree: Tree<Int>): Int =
+    when(tree) {
+        is Leaf -> tree.value
+        is Branch -> maxOf(maxElement(tree.left), maxElement(tree.right))
+    }
+
+fun <A> size(tree: Tree<A>): Int =
+    when (tree) {
+        is Leaf -> 1
+        is Branch -> 1 + size(tree.left) + size(tree.right)
+    }
+
+sealed class Tree<out A>
+data class Leaf<A>(val value: A) : Tree<A>()
+data class Branch<A>(
+    val left: Tree<A>,
+    val right: Tree<A>
+) : Tree<A>()
+
 tailrec fun <A> startsWith(l1: List<A>, l2: List<A>): Boolean =
     when(l1) {
         is Nil -> l2 == Nil
@@ -342,6 +395,7 @@ sealed class List<out A> {
 
     }
 }
+
 object Nil : List<Nothing>()
 data class Cons<out A>(
     val head: A,
