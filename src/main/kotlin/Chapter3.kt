@@ -212,6 +212,35 @@ fun exercise3point27() {
 //fun <A, B> map(tree: Tree<A>, f: (A) -> B): Tree<B> =
 }
 
+
+fun exercise3point28() {
+//    Generalize size, maximum, depth, and map for Tree,
+//    writing a new function fold that abstracts over their
+//    similarities. Reimplement them in terms of this more
+//            general function. Can you draw an analogy between
+//    this fold function and the left and right folds for List?
+
+//    fun <A, B> fold(ta: Tree<A>, l: (A) -> B, b: (B, B) -> B): B = TODO()
+//    fun <A> sizeF(ta: Tree<A>): Int = TODO()
+//    fun maximumF(ta: Tree<Int>): Int = TODO()
+//    fun <A> depthF(ta: Tree<A>): Int = TODO()
+//    fun <A, B> mapF(ta: Tree<A>, f: (A) -> B): Tree<B> = TODO()
+}
+
+fun <A, B> fold(ta: Tree<A>, l: (A) -> B, b: (B, B) -> B): B =
+    // l represents base case
+    // b represents transformation
+    when (ta) {
+        is Leaf -> l(ta.value)
+        is Branch -> b(fold(ta.left, l, b), fold(ta.right, l, b))
+    }
+
+    fun <A> sizeF(ta: Tree<A>): Int = fold(ta, {1}, {a, b -> 1 + a + b})
+    fun maximumF(ta: Tree<Int>): Int = fold(ta, { a -> a}, {b, c -> maxOf(b, c)})
+    fun <A> depthF(ta: Tree<A>): Int = fold(ta, {0}, {a, b -> 1 + a + b } )
+    fun <A, B> mapF(ta: Tree<A>, f: (A) -> B): Tree<B> =
+        fold(ta, { a: A -> Leaf(f(a)) }, {b: Tree<B>, c: Tree<B> -> Branch(b, c)} )
+
 fun <A, B> map(tree: Tree<A>, f: (A) -> B): Tree<B> =
     when (tree) {
         is Leaf -> Leaf(f(tree.value))
